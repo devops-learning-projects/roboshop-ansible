@@ -9,18 +9,3 @@
 #
 #systemctl enable nginx
 #systemctl restart nginx
-
-
-- name: frontend
-  hosts: all
-  become: true
-  tasks:
-    - name: Install Nginx
-      ansible.builtin.dnf:
-        name: nginx
-        state: latest
-
-    - name: Copy Nginx.conf
-      ansible.builtin.copy:
-        src: nginx.conf
-        dest: /etc/nginx/nginx.conf
