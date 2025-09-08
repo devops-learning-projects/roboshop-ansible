@@ -20,3 +20,8 @@
   ansible.builtin.shell: npm install
   args:
     chdir: /app
+
+- name: Load Systemd Service
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: systemd
