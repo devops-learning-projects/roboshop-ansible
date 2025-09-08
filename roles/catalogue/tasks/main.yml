@@ -1,0 +1,10 @@
+#source common.sh
+#component=catalogue
+#NODEJS
+#
+#dnf install mongodb-mongosh -y
+#mongosh --host mongodb-dev.maidevops.fun </app/db/master-data.js
+- name: Load Nodejs
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: nodejs
