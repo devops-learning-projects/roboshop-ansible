@@ -1,6 +1,6 @@
 default:
 	git pull
-	ansible-playbook -i 172.31.92.51, -e ansible_user=ec2-user -e ansible_password=DevOps321 roboshop.yml -e role_name=$(role_name) -e env=$(env) -e token=$(token)
+	ansible-playbook -i 172.31.166.94, -e ansible_user=ec2-user -e ansible_password=DevOps321 roboshop.yml -e role_name=$(role_name) -e env=$(env) -e token=$(token)
 #	ansible-playbook -i $(role_name)-dev.maidevops.fun, -e ansible_user=ec2-user -e ansible_password=DevOps321 roboshop.yml -e role_name=$(role_name) -e env=$(env) -e token=(token)
 
 tool:
