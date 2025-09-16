@@ -1,7 +1,3 @@
-#dnf install mysql-server -y
-#systemctl enable mysqld
-#systemctl start mysqld
-#mysql_secure_installation --set-root-pass $1
 - name: Install MySQL
   ansible.builtin.dnf:
     name: mysql-server
@@ -14,4 +10,4 @@
     enabled: yes
 
 - name: Set Root Password
-  ansible.builtin.shell: mysql_secure_installation --set-root-pass RoboShop@1
+  ansible.builtin.shell: mysql_secure_installation --set-root-pass {{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/mysql:ROOT_PASSWORD token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}
