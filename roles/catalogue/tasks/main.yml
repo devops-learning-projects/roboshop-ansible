@@ -32,7 +32,7 @@
       MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
       MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
 
-#      MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
+##   MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
 #      MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO_URL token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
 
 
@@ -40,8 +40,6 @@
   community.docker.docker_container:
     name: catalogue-schema
     image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
-    ports:
-      - "8080:8080"
     env:
       DB_TYPE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:DB_TYPE url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
       APP_GIT_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:APP_GIT_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
