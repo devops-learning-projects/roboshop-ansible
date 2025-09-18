@@ -61,16 +61,16 @@
     ports:
       - "80:80"
     env:
-     CATALOGUE_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CATALOGUE_HOST token=' + token) }}"
-     CATALOGUE_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CATALOGUE_PORT token=' + token) }}"
-     USER_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:USER_HOST token=' + token) }}"
-     USER_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:USER_PORT token=' + token) }}"
-     CART_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CART_HOST token=' + token) }}"
-     CART_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CART_PORT token=' + token) }}"
-     SHIPPING_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:SHIPPING_HOST token=' + token) }}"
-     SHIPPING_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:SHIPPING_PORT token=' + token) }}"
-     PAYMENT_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:PAYMENT_HOST token=' + token) }}"
-     PAYMENT_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:PAYMENT_PORT token=' + token) }}"
+     CATALOGUE_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CATALOGUE_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     CATALOGUE_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CATALOGUE_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     USER_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:USER_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     USER_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:USER_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     CART_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CART_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     CART_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CART_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     SHIPPING_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:SHIPPING_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     SHIPPING_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:SHIPPING_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     PAYMENT_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:PAYMENT_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+     PAYMENT_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:PAYMENT_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
 
 
 #  "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/frontend:CATALOGUE_HOST token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
