@@ -29,8 +29,12 @@
     ports:
       - "8080:8080"
     env:
-      MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
-      MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO_URL token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
+      env:
+        MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+        MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+
+#      MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
+#      MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO_URL token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
 
 
 - name: Load Schema
@@ -40,7 +44,7 @@
     ports:
       - "8080:8080"
     env:
-      DB_TYPE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:DB_TYPE token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
-      APP_GIT_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:APP_GIT_URL token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
-      DB_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:DB_HOST token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
-      SCHEMA_FILE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:SCHEMA_FILE token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
+      DB_TYPE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:DB_TYPE url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      APP_GIT_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:APP_GIT_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      DB_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:DB_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      SCHEMA_FILE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:SCHEMA_FILE url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
