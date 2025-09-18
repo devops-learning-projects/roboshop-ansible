@@ -34,7 +34,7 @@
 
 ##   MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
 #      MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/catalogue:MONGO_URL token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
-
+# post removed
 
 - name: Load Schema
   community.docker.docker_container:
