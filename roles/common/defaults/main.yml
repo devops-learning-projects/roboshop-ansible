@@ -1,8 +1,6 @@
-component: cart
-
 lvm_sizes:
   - {lvm: "RootVG-rootVol", size: 1 }
-  - {lvm: "RootVG-varVol", size: 12 }
+  - {lvm: "RootVG-varVol", size: 2 }
   - {lvm: "RootVG-varTmpVol", size: 2 }
   - {lvm: "RootVG-logVol", size: 2 }
   - {lvm: "RootVG-homeVol", size: 1 }

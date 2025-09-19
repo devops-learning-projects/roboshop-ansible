@@ -17,6 +17,10 @@
 #- name: Load Schema
 #  ansible.builtin.shell: mongosh --host mongodb-dev.maidevops.fun </app/db/master-data.js
 
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
+
 - name: Load Docker
   ansible.builtin.import_role:
     name: common

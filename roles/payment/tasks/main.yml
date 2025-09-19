@@ -2,6 +2,9 @@
 #  ansible.builtin.import_role:
 #    name: common
 #    tasks_from: python
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
 
 - name: Load Docker
   ansible.builtin.import_role:

@@ -1,1 +1,9 @@
 component: frontend
+
+lvm_sizes:
+  - {lvm: "RootVG-rootVol", size: 1 }
+  - {lvm: "RootVG-varVol", size: 11 }
+  - {lvm: "RootVG-varTmpVol", size: 2 }
+  - {lvm: "RootVG-logVol", size: 2 }
+  - {lvm: "RootVG-homeVol", size: 1 }
+  - {lvm: "RootVG-auditVol", size: 4.4 }
