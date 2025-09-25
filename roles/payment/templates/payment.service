@@ -1,0 +1,20 @@
+[Unit]
+Description=Payment Service
+
+[Service]
+User=root
+WorkingDirectory=/app
+Environment=CART_HOST={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:CART_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=CART_PORT={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:CART_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=USER_HOST={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:USER_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=USER_PORT={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:USER_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=AMQP_HOST={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:AMQP_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=AMQP_USER={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:AMQP_USER url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=AMQP_PASS={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/payment:AMQP_PASS url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+
+ExecStart=/usr/local/bin/uwsgi --ini payment.ini
+ExecStop=/bin/kill -9 $MAINPID
+SyslogIdentifier=payment
+
+[Install]
+WantedBy=multi-user.target
