@@ -1,0 +1,12 @@
+[Unit]
+Description = Catalogue Service
+
+[Service]
+User=roboshop
+Environment=MONGO={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=MONGO_URL="{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+ExecStart=/bin/node /app/server.js
+SyslogIdentifier=catalogue
+
+[Install]
+WantedBy=multi-user.target
