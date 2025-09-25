@@ -1,0 +1,12 @@
+[Unit]
+Description=Shipping Service
+
+[Service]
+User=roboshop
+Environment=CART_ENDPOINT={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:CART_ENDPOINT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+Environment=DB_HOST={{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:DB_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}
+ExecStart=/bin/java -jar /app/shipping.jar
+SyslogIdentifier=shipping
+
+[Install]
+WantedBy=multi-user.target
