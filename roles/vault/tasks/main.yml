@@ -1,17 +1,10 @@
-- name: HashiCorp Vault Installation Tasks
-
 - name: Copy Hashicorp Repo File
   ansible.builtin.copy:
     src: hashicorp.repo
     dest: /etc/yum.repos.d/hashicorp.repo
 
-- name: Clean DNF metadata cache
-  ansible.builtin.dnf:
-    clean: metadata
-    state: absent
-
-  # 3. Install Vault
 - name: Install Vault
   ansible.builtin.dnf:
     name: vault
     state: installed
+# vault installation
