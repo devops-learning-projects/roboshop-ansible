@@ -4,8 +4,3 @@ baseurl=https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
 enabled=1
 gpgcheck=0
 
-[hashicorp-test]
-name=Hashicorp Test - $basearch
-baseurl=https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/test
-enabled=0
-gpgcheck=0
