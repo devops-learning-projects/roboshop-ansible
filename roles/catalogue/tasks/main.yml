@@ -18,7 +18,33 @@
 #- name: Load Schema
 #  ansible.builtin.shell: mongosh --host mongodb-dev.maidevops.fun </app/db/master-data.js
 
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
+
 - name: Load Docker
   ansible.builtin.import_role:
     name: common
     tasks_from: docker
+
+- name: Launch Docker Container
+  community.docker.docker_container:
+    name: catalogue
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/catalogue
+    ports:
+      - "8080:8080"
+    env:
+      MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:MONGO_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+
+- name: Load Schema
+  community.docker.docker_container:
+    name: catalogue-schema
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+    ports:
+      - "8081:8080"
+    env:
+      DB_TYPE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:DB_TYPE url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      APP_GIT_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:APP_GIT_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      DB_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:DB_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      SCHEMA_FILE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/catalogue:SCHEMA_FILE url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
