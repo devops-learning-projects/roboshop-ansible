@@ -3,8 +3,23 @@
 #    name: common
 #    tasks_from: nodejs
 
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
 
 - name: Load Docker
   ansible.builtin.import_role:
     name: common
     tasks_from: docker
+
+
+- name: Launch Docker Container
+  community.docker.docker_container:
+    name: user
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/user
+    ports:
+      - "8080:8080"
+    env:
+      MONGO: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/user:MONGO url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      MONGO_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/user:MONGO_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      REDIS_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/user:REDIS_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
