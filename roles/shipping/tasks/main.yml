@@ -16,7 +16,38 @@
 #    - master-data
 
 
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
+
 - name: Load Docker
   ansible.builtin.import_role:
     name: common
     tasks_from: docker
+
+
+- name: Launch Docker Container
+  community.docker.docker_container:
+    name: shipping
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/shipping
+    ports:
+      - "8080:8080"
+    env:
+      CART_ENDPOINT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:CART_ENDPOINT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      DB_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:DB_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+
+- name: Schema Container
+  loop:
+    - app-user
+    - schema
+    - master-data
+  community.docker.docker_container:
+    name: shipping-schema-{{ item }}
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+    env:
+      DB_TYPE: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:DB_TYPE url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      APP_GIT_URL: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:APP_GIT_URL url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      DB_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:DB_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      DB_USER: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:DB_USER url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      DB_PASS: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/shipping:DB_PASS url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      SCHEMA_FILE: "db/{{ item }}.sql"
