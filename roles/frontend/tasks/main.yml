@@ -1,16 +1,4 @@
-##dnf module disable nginx -y
-##dnf module enable nginx:1.24 -y
-##dnf install nginx -y
-##cp nginx.conf /etc/nginx/nginx.conf
-##rm -rf /usr/share/nginx/html/*
-##curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
-##cd /usr/share/nginx/html
-##unzip /tmp/frontend.zip
-##
-##systemctl enable nginx
-##systemctl restart nginx
-## shell commands ^
-## Ansible codes below
+# Ansible codes below
 #- name: Disable nginx default version
 #  ansible.builtin.shell: dnf module disable nginx -y
 #
@@ -48,8 +36,32 @@
 #    name: nginx
 #    state: restarted
 #    enabled: yes
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
 
 - name: Load Docker
   ansible.builtin.import_role:
     name: common
     tasks_from: docker
+
+- name: Launch Docker Container
+  community.docker.docker_container:
+    name: frontend
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/frontend
+    ports:
+      - "80:80"
+    env:
+      CATALOGUE_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CATALOGUE_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      CATALOGUE_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CATALOGUE_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      USER_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:USER_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      USER_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:USER_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      CART_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CART_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      CART_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:CART_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      SHIPPING_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:SHIPPING_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      SHIPPING_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:SHIPPING_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      PAYMENT_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:PAYMENT_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      PAYMENT_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/frontend:PAYMENT_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+
+
+#  "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-{{env}}/data/frontend:CATALOGUE_HOST token={{ token }} url=http://vault-internal.maidevops.fun:8200') }}"
