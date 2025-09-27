@@ -1,50 +1,55 @@
-#dnf module disable nginx -y
-#dnf module enable nginx:1.24 -y
-#dnf install nginx -y
-#cp nginx.conf /etc/nginx/nginx.conf
-#rm -rf /usr/share/nginx/html/*
-#curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
-#cd /usr/share/nginx/html
-#unzip /tmp/frontend.zip
+##dnf module disable nginx -y
+##dnf module enable nginx:1.24 -y
+##dnf install nginx -y
+##cp nginx.conf /etc/nginx/nginx.conf
+##rm -rf /usr/share/nginx/html/*
+##curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+##cd /usr/share/nginx/html
+##unzip /tmp/frontend.zip
+##
+##systemctl enable nginx
+##systemctl restart nginx
+## shell commands ^
+## Ansible codes below
+#- name: Disable nginx default version
+#  ansible.builtin.shell: dnf module disable nginx -y
 #
-#systemctl enable nginx
-#systemctl restart nginx
-# shell commands ^
-# Ansible codes below
-- name: Disable nginx default version
-  ansible.builtin.shell: dnf module disable nginx -y
+#- name: Enable nginx 1.24 version
+#  ansible.builtin.shell: dnf module disable nginx -y
+#
+#- name: Install nginx
+#  ansible.builtin.dnf:
+#    name: nginx
+#    state: installed
+#
+#- name: Copy nginx conf
+#  ansible.builtin.template:
+#    src: nginx.conf
+#    dest: /etc/nginx/nginx.conf
+#
+#- name: Remove nginx default content
+#  ansible.builtin.file:
+#    path: /usr/share/nginx/html/
+#    state: absent
+#
+#- name: Create nginx http directory
+#  ansible.builtin.file:
+#    path: /usr/share/nginx/html/
+#    state: directory
+#
+#- name: Download nginx content
+#  ansible.builtin.unarchive:
+#    src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+#    dest: /usr/share/nginx/html/
+#    remote_src: yes
+#
+#- name: Start nginx
+#  ansible.builtin.systemd_service:
+#    name: nginx
+#    state: restarted
+#    enabled: yes
 
-- name: Enable nginx 1.24 version
-  ansible.builtin.shell: dnf module disable nginx -y
-
-- name: Install nginx
-  ansible.builtin.dnf:
-    name: nginx
-    state: installed
-
-- name: Copy nginx conf
-  ansible.builtin.template:
-    src: nginx.conf
-    dest: /etc/nginx/nginx.conf
-
-- name: Remove nginx default content
-  ansible.builtin.file:
-    path: /usr/share/nginx/html/
-    state: absent
-
-- name: Create nginx http directory
-  ansible.builtin.file:
-    path: /usr/share/nginx/html/
-    state: directory
-
-- name: Download nginx content
-  ansible.builtin.unarchive:
-    src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
-    dest: /usr/share/nginx/html/
-    remote_src: yes
-
-- name: Start nginx
-  ansible.builtin.systemd_service:
-    name: nginx
-    state: restarted
-    enabled: yes
+- name: Load Docker
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: docker
