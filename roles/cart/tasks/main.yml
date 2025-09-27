@@ -2,8 +2,22 @@
 #  ansible.builtin.import_role:
 #    name: common
 #    tasks_from: nodejs
+- name: Load common main
+  ansible.builtin.import_role:
+    name: common
 
 - name: Load Docker
   ansible.builtin.import_role:
     name: common
     tasks_from: docker
+
+- name: Launch Docker Container
+  community.docker.docker_container:
+    name: cart
+    image: public.ecr.aws/w8x4g9h7/roboshop-v3/cart
+    ports:
+      - "8080:8080"
+    env:
+      CATALOGUE_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/cart:CATALOGUE_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      CATALOGUE_PORT: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/cart:CATALOGUE_PORT url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
+      REDIS_HOST: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-' + env + '/data/cart:REDIS_HOST url=http://vault-internal.maidevops.fun:8200 auth_method=token token=' + token) }}"
