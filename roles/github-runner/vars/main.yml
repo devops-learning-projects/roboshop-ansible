@@ -1,0 +1,5 @@
+runner_version: 2.329.0
+# Change this as per your Org Name
+github_org_name: devops-learning-projects
+# Change this as per your DNS Name
+vault_url: "http://vault-internal.maidevops.fun:8200"
