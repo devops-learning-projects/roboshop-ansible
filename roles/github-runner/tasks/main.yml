@@ -25,7 +25,7 @@
     chdir: /github-runner
   become_user: github-runner
   vars:
-    token: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-infra/data/github-runner:RUNNER_TOKEN token={{ vault_token }} url={{ vault_url }}') }}"
+    token: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-infra/data/github-runner:RUNNER_TOKEN token=' + vault_token + ' url=' + vault_url) }}"
   ignore_errors: yes
 
 - name: Copy Service
