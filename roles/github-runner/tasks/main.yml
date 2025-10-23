@@ -90,3 +90,4 @@
     name:
       - nodejs
       - maven
+      - npm
