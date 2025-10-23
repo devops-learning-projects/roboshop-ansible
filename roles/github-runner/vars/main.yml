@@ -4,7 +4,7 @@ github_org_name: devops-learning-projects
 # Change this as per your DNS Name
 vault_url: "http://vault-internal.maidevops.fun:8200"
 
-vm_disks:
+lvm_disks:
   - { vgname: RootVG, lvmname: auditVol, size: 4.40g }
   - { vgname: RootVG, lvmname: homeVol, size: 3g }
   - { vgname: RootVG, lvmname: logVol, size: 2g }
