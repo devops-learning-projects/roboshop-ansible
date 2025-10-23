@@ -1,14 +1,19 @@
-- name: Extend an existing partition
-  community.general.parted:
-    device: /dev/nvme0n1
-    number: 4
-    part_end: "100%"
-    resize: true
-    state: present
+- name: Increase disk partition size
+  ansible.builtin.shell: growpart /dev/nvme0n1 4
+  ignore_errors: yes
 
 - name: Update logical volume Size
   loop: "{{ lvm_disks }}"
   community.general.lvol:
     vg: "{{ item.vgname }}"
-    lv: "{{ item.lvname }}"
+    lv: "{{ item.lvmname }}"
     size: "{{ item.size }}"
+    resizefs: true
+
+#- name: Extend Partition
+#  community.general.parted:
+#    device: /dev/nvme0n1
+#    number: 4
+#    part_end: "100%"
+#    resize: true
+#    state: present

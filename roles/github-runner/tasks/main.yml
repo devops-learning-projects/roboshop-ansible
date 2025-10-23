@@ -1,6 +1,12 @@
 - name: Set Prompt
   ansible.builtin.shell: set-prompt github-runner
 
+# increased disk size for github-runner instance
+- name: Load common lvm
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: lvm
+
 - name: Add github runner user
   ansible.builtin.user:
     name: github-runner
