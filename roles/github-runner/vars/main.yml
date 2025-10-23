@@ -3,3 +3,12 @@ runner_version: 2.329.0
 github_org_name: devops-learning-projects
 # Change this as per your DNS Name
 vault_url: "http://vault-internal.maidevops.fun:8200"
+
+vm_disks:
+  - { vgname: RootVG, lvname: auditVol, size: 4.40g }
+  - { vgname: RootVG, lvname: homeVol, size: 3g }
+  - { vgname: RootVG, lvname: logVol, size: 2g }
+  - { vgname: RootVG, lvname: rootVol, size: 10g }
+  - { vgname: RootVG, lvname: swapVol, size: 2g }
+  - { vgname: RootVG, lvname: varTmpVol, size: 2g }
+  - { vgname: RootVG, lvname: varVol, size: 2g }

@@ -1,0 +1,14 @@
+- name: Extend an existing partition
+  community.general.parted:
+    device: /dev/nvme0n1
+    number: 4
+    part_end: "100%"
+    resize: true
+    state: present
+
+- name: Update logical volume Size
+  loop: "{{ lvm_disks }}"
+  community.general.lvol:
+    vg: "{{ item.vgname }}"
+    lv: "{{ item.lvname }}"
+    size: "{{ item.size }}"
