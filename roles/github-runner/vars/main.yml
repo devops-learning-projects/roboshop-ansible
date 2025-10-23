@@ -11,4 +11,4 @@ lvm_disks:
   - { vgname: RootVG, lvmname: rootVol, size: 10g }
   - { vgname: RootVG, lvmname: swapVol, size: 2g }
   - { vgname: RootVG, lvmname: varTmpVol, size: 2g }
-  - { vgname: RootVG, lvmname: varVol, size: 2g }
+  - { vgname: RootVG, lvmname: varVol, size: 22g }
