@@ -91,3 +91,8 @@
       - nodejs
       - maven
       - npm
+
+# Install helm to deploy components to helm chart
+- name: Install Helm
+  ansible.builtin.shell: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
