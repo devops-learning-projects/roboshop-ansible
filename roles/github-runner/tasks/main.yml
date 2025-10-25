@@ -36,14 +36,18 @@
 
 - name: Runner Container
   community.docker.docker_container:
-    name: runner1
+    name: "{{ item }}"
     image: 804756348441.dkr.ecr.us-east-1.amazonaws.com/runner
     state: started
     recreate: true
     env:
-      NAME: runner1
+      NAME: "{{ item }}"
       TOKEN: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-infra/data/github-runner:RUNNER_TOKEN token=' + vault_token + ' url=' + vault_url) }}"
       ORG: "https://github.com/devops-learning-projects"
+  loop:
+    - runner1
+    - runner2
+    - runner3
 
 # The things of below we moved inside a container.
 #- name: Download runner software
