@@ -1,45 +1,13 @@
-- name: Set Prompt
-  ansible.builtin.shell: set-prompt github-runner
-
-# increased disk size for github-runner instance
-- name: Load common lvm
-  ansible.builtin.import_role:
-    name: common
-    tasks_from: lvm
-
-# Docker Installation
-- name: Download Docker Repo
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/rhel/docker-ce.repo
-    dest: /etc/yum.repos.d/docker.repo
-
-- name: Install Docker
-  ansible.builtin.dnf:
-    name: docker-ce
-    state: installed
-
-- name: Start Docker
-  ansible.builtin.systemd_service:
-    name: docker
-    state: started
-    enabled: yes
-
-- name: Add github runner user
-  ansible.builtin.user:
-    name: github-runner
-    home: /github-runner
-    groups: docker
-
-- name: Login To ECR
-  ansible.builtin.shell: |
-    /usr/local/bin/aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 804756348441.dkr.ecr.us-east-1.amazonaws.com
-
 - name: Runner Container
   community.docker.docker_container:
     name: "{{ item }}"
     image: 804756348441.dkr.ecr.us-east-1.amazonaws.com/runner
     state: started
     recreate: true
+    pull: always
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     env:
       NAME: "{{ item }}"
       TOKEN: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-infra/data/github-runner:RUNNER_TOKEN token=' + vault_token + ' url=' + vault_url) }}"
@@ -48,6 +16,66 @@
     - runner1
     - runner2
     - runner3
+  register: out
+  ignore_errors: yes
+
+- name: Run From Scratch
+  when: out.failed is defined
+  block:
+    - name: Set Prompt
+      ansible.builtin.shell: set-prompt github-runner
+
+    # increased disk size for github-runner instance
+    - name: Load common lvm
+      ansible.builtin.import_role:
+        name: common
+        tasks_from: lvm
+
+    # Docker Installation
+    - name: Download Docker Repo
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/rhel/docker-ce.repo
+        dest: /etc/yum.repos.d/docker.repo
+
+    - name: Install Docker
+      ansible.builtin.dnf:
+        name: docker-ce
+        state: installed
+
+    - name: Start Docker
+      ansible.builtin.systemd_service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add github runner user
+      ansible.builtin.user:
+        name: github-runner
+        home: /github-runner
+        groups: docker
+
+    - name: Login To ECR
+      ansible.builtin.shell: |
+        /usr/local/bin/aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 804756348441.dkr.ecr.us-east-1.amazonaws.com
+
+    - name: Runner Container
+      community.docker.docker_container:
+        name: "{{ item }}"
+        image: 804756348441.dkr.ecr.us-east-1.amazonaws.com/runner
+        state: started
+        recreate: true
+        pull: always
+        restart_policy: always
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+        env:
+          NAME: "{{ item }}"
+          TOKEN: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-infra/data/github-runner:RUNNER_TOKEN token=' + vault_token + ' url=' + vault_url) }}"
+          ORG: "https://github.com/devops-learning-projects"
+      loop:
+        - runner1
+        - runner2
+        - runner3
 
 # The things of below we moved inside a container.
 #- name: Download runner software
