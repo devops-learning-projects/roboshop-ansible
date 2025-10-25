@@ -30,6 +30,20 @@
     home: /github-runner
     groups: docker
 
+- name: Login To ECR
+  ansible.builtin.shell: |
+    /usr/local/bin/aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 804756348441.dkr.ecr.us-east-1.amazonaws.com
+
+- name: Runner Container
+  community.docker.docker_container:
+    name: runner1
+    image: 804756348441.dkr.ecr.us-east-1.amazonaws.com/runner
+    state: started
+    recreate: true
+    env:
+      NAME: runner1
+      TOKEN: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=roboshop-infra/data/github-runner:RUNNER_TOKEN token=' + vault_token + ' url=' + vault_url) }}"
+      ORG: "https://github.com/devops-learning-projects"
 
 # The things of below we moved inside a container.
 #- name: Download runner software
