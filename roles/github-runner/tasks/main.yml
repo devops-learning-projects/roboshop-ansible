@@ -42,11 +42,18 @@
         name: docker-ce
         state: installed
 
+    - name: Copy Docker service file
+      ansible.builtin.template:
+        src: docker.service
+        dest: /etc/systemd/system/multi-user.target.wants/docker.service
+#        dest: /usr/lib/systemd/system/docker.service
+
     - name: Start Docker
       ansible.builtin.systemd_service:
         name: docker
-        state: started
+        state: restarted
         enabled: yes
+        daemon-reload: yes
 
     - name: Add github runner user
       ansible.builtin.user:
