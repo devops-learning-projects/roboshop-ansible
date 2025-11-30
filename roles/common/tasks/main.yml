@@ -9,3 +9,9 @@
   ansible.builtin.shell: lvextend -r -L {{ item.size }}G /dev/mapper/{{ item.lvm }}
   loop: "{{ lvm_sizes }}"
   ignore_errors: yes
+
+# Download node exporter on every ec2 instances
+- name: Node Exporter
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: node_exporter
